@@ -51,7 +51,7 @@ export default function Form() {
             <h1 className='text-xl text-slate-300'>Links</h1>
         </div>
        {
-        shortLink.map((item,index)=>(
+        shortLink?.reverse()?.map((item,index)=>(
             <LinkItem setLinks={setShortLink} link={item}key={index}/>
         ))
        }
