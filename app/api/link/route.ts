@@ -49,7 +49,7 @@ export async function GET(Request:NextRequest) {
     try {
         await pool.execute('CREATE TABLE IF NOT EXISTS links2 (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(256), short_link varchar(256),short varchar(256),publish_date varchar(256))')
         const id = Request.nextUrl.searchParams.get("id")
-        const [rows,url]:any[]=await pool.execute('SELECT * FROM links WHERE short=?',[id])
+        const [rows,url]:any[]=await pool.execute('SELECT * FROM links2 WHERE short=?',[id])
         if(!rows?.length){
          
             
