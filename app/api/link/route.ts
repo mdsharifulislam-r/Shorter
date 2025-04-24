@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(Request:Request) {
     try {
-        await pool.execute('CREATE TABLE IF NOT EXISTS links (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(4000), short_link varchar(256),short varchar(256),publish_date varchar(256))')
+        await pool.execute('CREATE TABLE links (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(4000), short_link varchar(256),short varchar(256),publish_date varchar(256))')
         const link:LinkType = await Request.json()
 
         if(!link.long_link){
