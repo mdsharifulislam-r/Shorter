@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(Request:Request) {
     try {
-        await pool.execute('CREATE TABLE links (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(4000), short_link varchar(256),short varchar(256),publish_date varchar(256))')
+        await pool.execute('CREATE TABLE IF NOT EXISTS links2 (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(4000), short_link varchar(256),short varchar(256),publish_date varchar(256))')
         const link:LinkType = await Request.json()
 
         if(!link.long_link){
@@ -13,7 +13,7 @@ export async function POST(Request:Request) {
                 message:"Inavalid Credintials"
             },{status:400})
         }
-        const [rows]:any[] = await pool.execute('SELECT * FROM links WHERE long_link=?',[link.long_link])
+        const [rows]:any[] = await pool.execute('SELECT * FROM links2 WHERE long_link=?',[link.long_link])
         if(rows.length){
             console.log(rows[0]);
             
@@ -21,7 +21,7 @@ export async function POST(Request:Request) {
         }
         const link2 = MakeLink()
         const url = `${process.env.BASE_URL}/l/${link2}`
-        await pool.execute('INSERT INTO links (long_link,short_link,publish_date,short) VALUES (?,?,?,?)',[link.long_link,url,new Date().toLocaleDateString(),link2])
+        await pool.execute('INSERT INTO links2 (long_link,short_link,publish_date,short) VALUES (?,?,?,?)',[link.long_link,url,new Date().toLocaleDateString(),link2])
         return NextResponse.json({
             short_link:url,
             long_link:link.long_link
@@ -47,7 +47,7 @@ return link
 
 export async function GET(Request:NextRequest) {
     try {
-        await pool.execute('CREATE TABLE IF NOT EXISTS links (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(256), short_link varchar(256),short varchar(256),publish_date varchar(256))')
+        await pool.execute('CREATE TABLE IF NOT EXISTS links2 (link_id int not null AUTO_INCREMENT PRIMARY KEY,long_link varchar(256), short_link varchar(256),short varchar(256),publish_date varchar(256))')
         const id = Request.nextUrl.searchParams.get("id")
         const [rows,url]:any[]=await pool.execute('SELECT * FROM links WHERE short=?',[id])
         if(!rows?.length){
